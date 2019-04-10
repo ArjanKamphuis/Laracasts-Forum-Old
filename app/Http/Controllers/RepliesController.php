@@ -12,10 +12,11 @@ class RepliesController extends Controller
     }
 
     /**
+     * @param  $channelId
      * @param  App\Thread $thread
      * @return \Illuminate\Http\Response
      */
-    public function store(Thread $thread) {
+    public function store($channelId, Thread $thread) {
         $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()
