@@ -27,4 +27,8 @@ class Thread extends Model
     public function addReply(array $reply) {
         $this->replies()->create($reply);
     }
+
+    public function scopeFilter($query, $filters) {
+        return $filters->apply($query);
+    }
 }
