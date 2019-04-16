@@ -18,13 +18,13 @@ class ThreadsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Channel $channel
+     * @param  \App\Filters\ThreadFilter $filters
      * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
-        $threads = ($channel->exists ? $channel->threads() : Thread::latest())
-            ->filter($filters)->get();
-        return view('threads.index', compact('threads'));
+        $threads = $this->getThreads($channel, $filters);
+        return request()->wantsJson() ? $threads : view('threads.index', compact('threads'));
     }
 
     /**
@@ -106,5 +106,17 @@ class ThreadsController extends Controller
     public function destroy(Thread $thread)
     {
         //
+    }
+
+    /**
+     * Get The threads filtered and by channel if exists
+     *
+     * @param  \App\Channel $channel
+     * @param  \App\Filters\ThreadFilter $filters
+     * @return \Illuminate\Http\Response
+     */
+    protected function getThreads(Channel $channel, ThreadFilters $filters) {
+        $threads = Thread::filter($filters)->latest();
+        return ($channel->exists ? $threads->where('channel_id', $channel->id) : $threads)->get(); 
     }
 }
