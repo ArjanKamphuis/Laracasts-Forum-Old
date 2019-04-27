@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col align-self-center">
-                <a href="#">{{ $reply->owner->name }}</a> said {{ $reply->created_at->diffForHumans() }}...
+                <a href="/profiles/{{ $reply->owner->name }}">{{ $reply->owner->name }}</a> said {{ $reply->created_at->diffForHumans() }}...
             </div>
             <div class="col-auto">
                 <form method="POST" action="/replies/{{ $reply->id }}/favorites">
