@@ -116,7 +116,7 @@ class ThreadsController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected function getThreads(Channel $channel, ThreadFilters $filters) {
-        $threads = Thread::with('channel')->filter($filters)->latest();
+        $threads = Thread::filter($filters)->latest();
         return ($channel->exists ? $threads->where('channel_id', $channel->id) : $threads)->get(); 
     }
 }
