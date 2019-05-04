@@ -24,6 +24,7 @@
         @include('layouts.nav')
         <main class="py-4">
             @yield('content')
+            <flash-component message="{{ session('flash') }}"></flash-component>
         </main>
     </div>
 </body>
