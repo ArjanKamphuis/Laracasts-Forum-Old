@@ -9,8 +9,14 @@ class Reply extends Model
     use Favoritable, RecordsActivity;
     
     protected $guarded = [];
-
     protected $with = ['owner', 'favorites'];
+
+    protected static function boot() {
+        parent::boot();
+        static::deleting(function(Reply $reply) {
+            $reply->favorites->each->delete();
+        });
+    }
 
     public function owner() {
         return $this->belongsTo(User::class, 'user_id');
