@@ -6,18 +6,16 @@
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col align-self-center">
+                    <div class="d-flex d-flex-row align-items-center">
+                        <div class="mr-auto">
                             <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted: {{ $thread->title }}
                         </div>
                         @can ('update', $thread)
-                            <div class="col-auto">
-                                <form action="{{ $thread->path() }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this thread?')">Delete Thread</button>
-                                </form>
-                            </div>
+                            <form action="{{ $thread->path() }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this thread?')">Delete Thread</button>
+                            </form>
                         @endcan
                     </div>
                 </div>
