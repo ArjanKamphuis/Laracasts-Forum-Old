@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <textarea class="form-control" v-model="body"></textarea>
                 </div>
-                <button class="btn btn-sm btn-primary" @click="update()">Update</button>
+                <button class="btn btn-sm btn-primary" @click="update">Update</button>
                 <button class="btn btn-sm btn-link" @click="editing = false">Cancel</button>
             </div>
             <div v-else v-text="body"></div>
@@ -28,11 +28,7 @@
             <div class="card-footer">
                 <div class="d-flex d-flex-row">
                     <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
-                    <form method="POST" action="/replies/{{ $reply->id }}">
-                        {{ csrf_field() }}
-                        {{ method_field('DELETE') }}
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this reply?')">Delete</button>
-                    </form>
+                    <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
                 </div>
             </div>
         @endcan

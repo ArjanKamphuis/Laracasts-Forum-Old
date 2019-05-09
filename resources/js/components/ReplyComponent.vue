@@ -16,6 +16,12 @@
                 });
                 this.editing = false;
                 flash('Updated');
+            },
+            destroy() {
+                if (confirm('Are you sure you want to delete this reply?')) {
+                    axios.delete(`/replies/${this.attributes.id}`);
+                    $(this.$el).fadeOut(300, () => flash('Your reply has been deleted.'));
+                }
             }
         }
     }
