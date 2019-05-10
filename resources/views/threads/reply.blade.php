@@ -5,7 +5,9 @@
                 <div class="mr-auto">
                     <a href="{{ route('profile', $reply->owner) }}">{{ $reply->owner->name }}</a> said {{ $reply->created_at->diffForHumans() }}...
                 </div>
-                <favorite-component :reply="{{ $reply }}"></favorite-component>
+                @if (Auth::check())
+                    <favorite-component :reply="{{ $reply }}"></favorite-component>
+                @endif
             </div>
         </div>
         <div class="card-body">
