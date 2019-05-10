@@ -18,4 +18,12 @@ class FavoritesController extends Controller
         $reply->favorite();
         return back();
     }
+
+    /**
+     * @param  \App\Reply $reply
+     * @return -
+     */
+    public function destroy(Reply $reply) {
+        $reply->unfavorite();
+    }
 }

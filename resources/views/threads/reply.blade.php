@@ -5,12 +5,7 @@
                 <div class="mr-auto">
                     <a href="{{ route('profile', $reply->owner) }}">{{ $reply->owner->name }}</a> said {{ $reply->created_at->diffForHumans() }}...
                 </div>
-                <form method="POST" action="/replies/{{ $reply->id }}/favorites">
-                    {{ csrf_field() }}
-                    <button type="submit" class="btn btn-secondary" {{ $reply->isFavorited() ? 'disabled' : ''}}>
-                        {{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}
-                    </button>
-                </form>
+                <favorite-component :reply="{{ $reply }}"></favorite-component>
             </div>
         </div>
         <div class="card-body">

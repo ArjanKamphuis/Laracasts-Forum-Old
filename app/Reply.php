@@ -10,6 +10,7 @@ class Reply extends Model
     
     protected $guarded = [];
     protected $with = ['owner', 'favorites'];
+    protected $appends = ['favoritesCount', 'isFavorited'];
 
     protected static function boot() {
         parent::boot();
@@ -28,5 +29,9 @@ class Reply extends Model
 
     public function path() {
         return $this->thread->path() . "#reply-{$this->id}";
+    }
+
+    public function getFavoritesCountAttribute() {
+        return $this->favorites->count();
     }
 }
