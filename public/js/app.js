@@ -1775,7 +1775,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       count: this.reply.favoritesCount,
-      active: this.reply.active
+      active: this.reply.isFavorited
     };
   },
   computed: {
