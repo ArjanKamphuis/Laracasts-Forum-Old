@@ -1,21 +1,64 @@
+<template>
+    <div :id="`reply-${id}`" class="card mb-3" v-cloak>
+        <div class="card-header">
+            <div class="d-flex d-flex-row align-items-center">
+                <div class="mr-auto">
+                    <a :href="`/profiles/${owner}`" v-text="owner"></a> said {{ data.created_at }}...
+                </div>
+                <div v-if="signedIn">
+                    <favorite-component :reply="data"></favorite-component>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div v-if="editing">
+                <div class="form-group">
+                    <textarea class="form-control" v-model="body"></textarea>
+                </div>
+                <button class="btn btn-sm btn-primary" @click="update">Update</button>
+                <button class="btn btn-sm btn-link" @click="editing = false">Cancel</button>
+            </div>
+            <div v-else v-text="body"></div>
+        </div>
+
+        <div class="card-footer" v-if="canUpdate">
+            <div class="d-flex d-flex-row">
+                <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
+                <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script>
     import FavoriteComponent from './FavoriteComponent';
     
     export default {
-        props: ['attributes'],
+        props: ['data'],
 
         components: { FavoriteComponent },
+
+        computed: {
+            signedIn() {
+                return window.App.signedIn;
+            },
+            canUpdate() {
+                return this.authorize(user => this.data.user_id == user.id);
+            }
+        },
 
         data() {
             return {
                 editing: false,
-                body: this.attributes.body
+                id: this.data.id,
+                owner: this.data.owner.name,
+                body: this.data.body
             };
         },
 
         methods: {
             update() {
-                axios.patch(`/replies/${this.attributes.id}`, {
+                axios.patch(`/replies/${this.id}`, {
                     body: this.body
                 });
                 this.editing = false;
@@ -23,10 +66,10 @@
             },
             destroy() {
                 if (confirm('Are you sure you want to delete this reply?')) {
-                    axios.delete(`/replies/${this.attributes.id}`);
-                    $(this.$el).fadeOut(300, () => flash('Your reply has been deleted.'));
+                    axios.delete(`/replies/${this.id}`);
+                    this.$emit('deleted', this.id);
                 }
             }
         }
-    }
+    };
 </script>
