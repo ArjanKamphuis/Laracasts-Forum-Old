@@ -22,7 +22,7 @@
             },
 
             endpoint() {
-                return `/replies/${this.reply.id}/favorites`
+                return `/replies/${this.reply.id}/favorites`;
             }
         },
 
