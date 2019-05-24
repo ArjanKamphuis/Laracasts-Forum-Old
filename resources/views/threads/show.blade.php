@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<thread-view-component :initial-replies-count="{{ $thread->replies_count }}" inline-template>
+<thread-page :initial-replies-count="{{ $thread->replies_count }}" inline-template>
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -23,9 +23,7 @@
                     <div class="card-body">{{ $thread->body }}</div>
                 </div>
 
-                <replies-component :data="{{ $thread->replies }}" @removed="repliesCount--" @added="repliesCount++"></replies-component>
-
-                {{--{{ $replies->links() }}--}}
+                <replies-component @removed="repliesCount--" @added="repliesCount++"></replies-component>
             </div>
 
             <div class="col-md-4">
@@ -39,5 +37,5 @@
             </div>
         </div>    
     </div>
-</thread-view-component>
+</thread-page>
 @endsection

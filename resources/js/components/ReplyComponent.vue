@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="d-flex d-flex-row align-items-center">
                 <div class="mr-auto">
-                    <a :href="`/profiles/${owner}`" v-text="owner"></a> said {{ data.created_at }}...
+                    <a :href="`/profiles/${owner}`" v-text="owner"></a> said <span v-text="ago"></span>...
                 </div>
                 <div v-if="signedIn">
                     <favorite-component :reply="data"></favorite-component>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+    import moment from 'moment';
     import FavoriteComponent from './FavoriteComponent';
     
     export default {
@@ -39,6 +40,9 @@
         components: { FavoriteComponent },
 
         computed: {
+            ago() {
+                return moment.utc(this.data.created_at).fromNow();
+            },
             signedIn() {
                 return window.App.signedIn;
             },
@@ -68,6 +72,7 @@
                 if (confirm('Are you sure you want to delete this reply?')) {
                     axios.delete(`/replies/${this.id}`);
                     this.$emit('deleted', this.id);
+                    flash('Reply has been deleted!');
                 }
             }
         }
