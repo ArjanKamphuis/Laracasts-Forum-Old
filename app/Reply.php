@@ -12,6 +12,18 @@ class Reply extends Model
     protected $with = ['owner', 'favorites'];
     protected $appends = ['favoritesCount', 'isFavorited'];
 
+    protected static function boot() {
+        parent::boot();
+
+        static::created(function (Reply $reply) {
+            $reply->thread->increment('replies_count');
+        });
+
+        static::deleted(function (Reply $reply) {
+            $reply->thread->decrement('replies_count');
+        });
+    }
+
     public function owner() {
         return $this->belongsTo(User::class, 'user_id');
     }

@@ -24,8 +24,9 @@ class ParticipateInThreadsTest extends TestCase
         $reply = make('App\Reply');
 
         $this->post($thread->path() . '/replies', $reply->toArray());
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->get($thread->path());
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
+        $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
     /** @test */
@@ -61,6 +62,7 @@ class ParticipateInThreadsTest extends TestCase
             ->assertStatus(302);
             
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
     }
 
     /** @test */
@@ -93,7 +95,7 @@ class ParticipateInThreadsTest extends TestCase
 
         $response = $this->getJson("{$thread->path()}/replies")->json();
 
-        $this->assertCount(1, $response['data']);
+        $this->assertCount(2, $response['data']);
         $this->assertEquals(2, $response['total']);
     }
 }
