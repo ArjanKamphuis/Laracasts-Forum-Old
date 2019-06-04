@@ -1,10 +1,11 @@
 <script>
     import RepliesComponent from '../components/RepliesComponent';
+    import SubscribeButtonComponent from '../components/SubscribeButtonComponent';
     
     export default {
         props: ['initialRepliesCount'],
 
-        components: { RepliesComponent },
+        components: { RepliesComponent, SubscribeButtonComponent },
 
         data() {
             return {
