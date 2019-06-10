@@ -7,8 +7,8 @@
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <div class="d-flex d-flex-row align-items-center">
-                            <div class="mr-auto">
+                        <div class="level">
+                            <div class="flex">
                                 <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted: {{ $thread->title }}
                             </div>
                             @can ('update', $thread)

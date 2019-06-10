@@ -27,6 +27,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
+        .level { display: flex; align-items:center; }
+        .flex { flex: 1; }
         [v-cloak] { display: none; }
     </style>
 </head>

@@ -1,8 +1,8 @@
 <reply-component :attributes="{{ $reply }}" inline-template v-cloak>
     <div id="reply-{{ $reply->id }}" class="card mb-3">
         <div class="card-header">
-            <div class="d-flex d-flex-row align-items-center">
-                <div class="mr-auto">
+            <div class="level">
+                <div class="flex">
                     <a href="{{ route('profile', $reply->owner) }}">{{ $reply->owner->name }}</a> said {{ $reply->created_at->diffForHumans() }}...
                 </div>
                 @if (Auth::check())
@@ -23,10 +23,8 @@
 
         @can ('update', $reply)
             <div class="card-footer">
-                <div class="d-flex d-flex-row">
-                    <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
-                    <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
-                </div>
+                <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
+                <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
             </div>
         @endcan
     </div>

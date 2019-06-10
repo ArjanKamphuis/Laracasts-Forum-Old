@@ -1,8 +1,8 @@
 <template>
     <div :id="`reply-${id}`" class="card mb-3" v-cloak>
         <div class="card-header">
-            <div class="d-flex d-flex-row align-items-center">
-                <div class="mr-auto">
+            <div class="level">
+                <div class="flex">
                     <a :href="`/profiles/${owner}`" v-text="owner"></a> said <span v-text="ago"></span>...
                 </div>
                 <div v-if="signedIn">
@@ -22,10 +22,8 @@
         </div>
 
         <div class="card-footer" v-if="canUpdate">
-            <div class="d-flex d-flex-row">
-                <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
-                <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
-            </div>
+            <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
+            <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
         </div>
     </div>
 </template>

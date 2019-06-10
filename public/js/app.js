@@ -2073,8 +2073,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -56023,8 +56021,8 @@ var render = function() {
     { staticClass: "card mb-3", attrs: { id: "reply-" + _vm.id } },
     [
       _c("div", { staticClass: "card-header" }, [
-        _c("div", { staticClass: "d-flex d-flex-row align-items-center" }, [
-          _c("div", { staticClass: "mr-auto" }, [
+        _c("div", { staticClass: "level" }, [
+          _c("div", { staticClass: "flex" }, [
             _c("a", {
               attrs: { href: "/profiles/" + _vm.owner },
               domProps: { textContent: _vm._s(_vm.owner) }
@@ -56097,29 +56095,27 @@ var render = function() {
       _vm._v(" "),
       _vm.canUpdate
         ? _c("div", { staticClass: "card-footer" }, [
-            _c("div", { staticClass: "d-flex d-flex-row" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary btn-sm mr-2",
-                  on: {
-                    click: function($event) {
-                      _vm.editing = true
-                    }
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary btn-sm mr-2",
+                on: {
+                  click: function($event) {
+                    _vm.editing = true
                   }
-                },
-                [_vm._v("Edit")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger btn-sm",
-                  on: { click: _vm.destroy }
-                },
-                [_vm._v("Delete")]
-              )
-            ])
+                }
+              },
+              [_vm._v("Edit")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger btn-sm",
+                on: { click: _vm.destroy }
+              },
+              [_vm._v("Delete")]
+            )
           ])
         : _vm._e()
     ]
