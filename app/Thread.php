@@ -2,6 +2,8 @@
 
 namespace App;
 
+
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -49,15 +51,30 @@ class Thread extends Model
      * @return Illuminate\Htpp\Response
      */
     public function addReply(array $reply) {
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        $this->subscriptions
+            ->filter(function ($sub) use ($reply) {
+                return $sub->user_id != $reply->user_id;
+            })
+            ->each->notify($reply);
+        
+        return $reply;
     }
 
     public function scopeFilter($query, $filters) {
         return $filters->apply($query);
     }
 
+    /**
+     * Subscribe to a thread
+     * 
+     * @param  integer $userId
+     * @return App\Thread
+     */
     public function subscribe($userId = null) {
         $this->subscriptions()->create(['user_id' => $userId ?: auth()->id()]);
+        return $this;
     }
 
     public function unsubscribe($userId = null) {
