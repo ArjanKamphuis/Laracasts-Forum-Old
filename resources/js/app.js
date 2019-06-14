@@ -23,6 +23,7 @@ window.Vue = require('vue');
 Vue.component('flash-component', require('./components/FlashComponent.vue').default);
 Vue.component('thread-page', require('./pages/ThreadPage.vue').default);
 Vue.component('paginator-component', require('./components/PaginatorComponent').default);
+Vue.component('user-notifications-component', require('./components/UserNotificationsComponent').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
