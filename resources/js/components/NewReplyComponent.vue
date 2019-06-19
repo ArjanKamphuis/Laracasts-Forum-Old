@@ -29,7 +29,7 @@
                         this.body = '';
                         this.$emit('created', data);
                         flash('Your reply has been posted.');
-                    });
+                    }, error => flash(error.response.data, 'danger'));
             }
         }
     };

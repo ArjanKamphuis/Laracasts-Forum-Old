@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Reply;
 use App\Thread;
 use App\Inspections\Spam;
@@ -28,12 +29,16 @@ class RepliesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store($channelId, Thread $thread) {
-        $this->validateReply();
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ]);
-        return request()->expectsJson() ? $reply->load('owner') : back()->with('flash', 'Your reply has been left.');
+        try {
+            $this->validateReply();
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ]);
+        } catch (Exception $e) {
+            return response('Sorry, your reply could not be saved at this time.', 422);
+        }
+        return $reply->load('owner');
     }
 
     /**
@@ -44,8 +49,12 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        $this->validateReply();
-        $reply->update(request(['body']));
+        try {
+            $this->validateReply();
+            $reply->update(request(['body']));
+        } catch (Exception $e) {
+            return response('Sorry, your reply could not be saved at this time.', 422);
+        }
     }
 
     /**

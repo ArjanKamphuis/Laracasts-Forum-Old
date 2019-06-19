@@ -60,11 +60,14 @@
 
         methods: {
             update() {
-                axios.patch(`/replies/${this.id}`, {
-                    body: this.body
-                });
-                this.editing = false;
-                flash('Updated');
+                axios.patch(
+                    `/replies/${this.id}`, {
+                        body: this.body
+                    })
+                    .then(() => {
+                        this.editing = false;
+                        flash('Updated');
+                    }, error => flash(error.response.data, 'danger'));
             },
             destroy() {
                 if (confirm('Are you sure you want to delete this reply?')) {
