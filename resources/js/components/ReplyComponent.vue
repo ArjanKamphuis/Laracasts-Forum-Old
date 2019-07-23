@@ -60,8 +60,7 @@
 
         methods: {
             update() {
-                axios.patch(
-                    `/replies/${this.id}`, {
+                axios.patch(`/replies/${this.id}`, {
                         body: this.body
                     })
                     .then(() => {
