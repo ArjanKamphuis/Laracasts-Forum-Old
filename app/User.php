@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
+    public function lastReply() {
+        return $this->hasOne(Reply::class)->latest();
+    }
+
     public function read(Thread $thread) {
         cache()->forever(
             $this->visitedThreadCacheKey($thread), 

@@ -38,7 +38,7 @@ class ParticipateInThreadsTest extends TestCase
         $reply = make('App\Reply', ['body' => null]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertSessionHasErrors('body');
+            ->assertStatus(422);
     }
 
     /** @test */
@@ -90,24 +90,26 @@ class ParticipateInThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_request_all_replies_for_a_given_thread() {
-        $thread = create('App\Thread');
-        $reply = create('App\Reply', ['thread_id' => $thread->id], 2);
-
-        $response = $this->getJson("{$thread->path()}/replies")->json();
-
-        $this->assertCount(2, $response['data']);
-        $this->assertEquals(2, $response['total']);
-    }
-
-    /** @test */
     public function replies_that_contain_spam_may_not_be_created() {
         $this->signIn();
 
         $thread = create('App\Thread');
         $reply = make('App\Reply', ['body' => 'Yahoo Customer Support']);
 
-        $this->expectException(Exception::class);
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
+    }
+
+    /** @test */
+    public function users_may_only_reply_a_maximum_of_once_per_minute() {
+        $this->signIn();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', ['body' => 'My simple reply.']);
+
+        $this->post($thread->path(). '/replies', $reply->toArray())
+            ->assertStatus(201);
+
+        $this->post($thread->path(). '/replies', $reply->toArray())
+            ->assertStatus(429);
     }
 }

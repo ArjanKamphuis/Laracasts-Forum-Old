@@ -14,11 +14,22 @@ class ReplyPolicy
      * Determine whether the user can update the reply.
      *
      * @param  \App\User  $user
-     * @param  \App\Reply  $reply
-     * @return mixed
+     * @param  \App\Reply $reply
+     * @return bool
      */
     public function update(User $user, Reply $reply)
     {
         return $reply->user_id == $user->id;
+    }
+
+    /**
+     * Determine whether the user just published a reply.
+     * 
+     * @param  \App\User $user
+     * @return bool
+     */
+    public function create(User $user) {
+        $lastReply = $user->fresh()->lastReply;
+        return $lastReply ? !$lastReply->wasJustPublished() : true;
     }
 }
