@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Reply;
 use App\Thread;
+use App\Http\Requests\CreatePostRequest;
 use App\Rules\SpamFree;
 
 use Illuminate\Http\Request;
@@ -27,29 +28,21 @@ class RepliesController extends Controller
     /**
      * @param  integer $channelId
      * @param  App\Thread $thread
+     * @param  App\Http\Forms\CreatePostForm $form
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread) {
-        if (Gate::denies('create', new Reply)) {
-            return response('You are posting to frequently. Please take a break. :)', 429);
-        }
-
-        try {
-            $this->validate(request(), ['body' => ['required', new SpamFree]]);
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-        } catch (Exception $e) {
-            return response('Sorry, your reply could not be saved at this time.', 422);
-        }
-        return $reply->load('owner');
+    public function store($channelId, Thread $thread, CreatePostRequest $form) {
+        return $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('owner');
     }
 
     /**
      * Update and existing reply
      * 
      * @param  App\Reply $reply
+     * @return \Illuminate\Http\Response
      */
     public function update(Reply $reply)
     {
