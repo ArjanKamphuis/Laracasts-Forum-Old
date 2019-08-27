@@ -13,12 +13,15 @@ use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
+    /**
+     * Create a new RepliesController instance.
+     */
     public function __construct() {
         $this->middleware('auth', ['except' => 'index']);
     }
 
     /**
-     * @param  $channelId
+     * @param  int $channelId
      * @param  App\Thread $thread
      */
     public function index($channelId, Thread $thread) {
@@ -47,12 +50,8 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        try {
-            $this->validate(request(), ['body' => 'required', new SpamFree]);
-            $reply->update(request(['body']));
-        } catch (Exception $e) {
-            return response('Sorry, your reply could not be saved at this time.', 422);
-        }
+        $this->validate(request(), ['body' => ['required', new SpamFree]]);
+        $reply->update(request(['body']));
     }
 
     /**
