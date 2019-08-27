@@ -2201,10 +2201,20 @@ __webpack_require__.r(__webpack_exports__);
       editing: false,
       id: this.data.id,
       owner: this.data.owner.name,
-      body: this.data.body
+      body: this.data.body,
+      old_body_data: ''
     };
   },
   methods: {
+    editReply: function editReply() {
+      this.old_body_data = this.body;
+      this.editing = true;
+    },
+    cancelReply: function cancelReply() {
+      this.body = this.old_body_data;
+      this.old_body_data = '';
+      this.editing = false;
+    },
     update: function update() {
       var _this2 = this;
 
@@ -56210,18 +56220,14 @@ var render = function() {
                     {
                       staticClass: "btn btn-sm btn-link",
                       attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.editing = false
-                        }
-                      }
+                      on: { click: _vm.cancelReply }
                     },
                     [_vm._v("Cancel")]
                   )
                 ]
               )
             ])
-          : _c("div", { domProps: { textContent: _vm._s(_vm.body) } })
+          : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
       _vm.canUpdate
@@ -56230,11 +56236,7 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-secondary btn-sm mr-2",
-                on: {
-                  click: function($event) {
-                    _vm.editing = true
-                  }
-                }
+                on: { click: _vm.editReply }
               },
               [_vm._v("Edit")]
             ),

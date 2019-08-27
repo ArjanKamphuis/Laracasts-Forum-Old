@@ -17,14 +17,14 @@
                         <textarea class="form-control" v-model="body" required></textarea>
                     </div>
                     <button class="btn btn-sm btn-primary">Update</button>
-                    <button class="btn btn-sm btn-link" @click="editing = false" type="button">Cancel</button>
+                    <button class="btn btn-sm btn-link" @click="cancelReply" type="button">Cancel</button>
                 </form>
             </div>
-            <div v-else v-text="body"></div>
+            <div v-else v-html="body"></div>
         </div>
 
         <div class="card-footer" v-if="canUpdate">
-            <button class="btn btn-secondary btn-sm mr-2" @click="editing = true">Edit</button>
+            <button class="btn btn-secondary btn-sm mr-2" @click="editReply">Edit</button>
             <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
         </div>
     </div>
@@ -56,11 +56,21 @@
                 editing: false,
                 id: this.data.id,
                 owner: this.data.owner.name,
-                body: this.data.body
+                body: this.data.body,
+                old_body_data: ''
             };
         },
 
         methods: {
+            editReply() {
+                this.old_body_data = this.body;
+                this.editing = true;
+            },
+            cancelReply() {
+                this.body = this.old_body_data;
+                this.old_body_data = '';
+                this.editing = false;
+            },
             update() {
                 axios.patch(`/replies/${this.id}`, {
                         body: this.body
