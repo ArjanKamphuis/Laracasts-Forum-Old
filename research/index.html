@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>At.js</title>
+    <link rel="stylesheet" href="/css/jquery.atwho.min.css">
+</head>
+<body>
+    <input type="text" id="inputor">
+    
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/jquery.caret.min.js"></script>
+    <script src="/js/jquery.atwho.min.js"></script>
+
+    <script>
+        $('#inputor').atwho({
+            at: "@",
+            delay: 2000,
+            callbacks: {
+                remoteFilter: (query, callback) => {
+                    $.getJSON('/users.php', { q: query }, (usernames) => {
+                        callback(usernames);
+                    })
+                }
+            }
+        });
+    </script>
+</body>
+</html>
