@@ -22,7 +22,7 @@
                 remoteFilter: (query, callback) => {
                     $.getJSON('/users.php', { q: query }, (usernames) => {
                         callback(usernames);
-                    })
+                    });
                 }
             }
         });

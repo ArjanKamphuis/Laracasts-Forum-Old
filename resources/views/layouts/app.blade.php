@@ -11,6 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    
+    @yield('scripts')
 
     <script>
         window.App = {!! json_encode([
@@ -31,6 +33,8 @@
         .flex { flex: 1; }
         [v-cloak] { display: none; }
     </style>
+
+    @yield('header')
 </head>
 <body>
     <div id="app">
