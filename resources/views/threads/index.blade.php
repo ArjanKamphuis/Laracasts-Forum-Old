@@ -7,6 +7,18 @@
             @include('threads._list')
             {{ $threads->render() }}
         </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Trending Threads</div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach ($trending as $thread)
+                            <a href="{{ url($thread->path) }}" class="list-group-item list-group-item-action">{{ $thread->title }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
