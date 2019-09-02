@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="card-body">{{ $thread->body }}</div>
-        <div class="card-footer">{{ $thread->visits()->count() }} {{ Str::plural('Visit', $thread->visits()->count()) }}</div>
+        <div class="card-footer">{{ $thread->visits }} {{ Str::plural('Visit', $thread->visits) }}</div>
     </div>
 @empty
     <p class="text-center">There are no relevant results at this time.</p>

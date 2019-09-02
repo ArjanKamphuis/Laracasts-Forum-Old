@@ -90,8 +90,4 @@ class Thread extends Model
     public function hasUpdatesFor(User $user) {
         return $this->updated_at > cache($user->visitedThreadCacheKey($this));
     }
-
-    public function visits() {
-        return new Visits($this);
-    }
 }
