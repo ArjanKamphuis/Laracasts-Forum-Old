@@ -29,7 +29,7 @@ class Thread extends Model
     }
 
     public function path() {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     public function replies() {
@@ -89,5 +89,9 @@ class Thread extends Model
 
     public function hasUpdatesFor(User $user) {
         return $this->updated_at > cache($user->visitedThreadCacheKey($this));
+    }
+
+    public function getRouteKeyName() {
+        return 'slug';
     }
 }

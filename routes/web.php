@@ -19,7 +19,7 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/threads', 'ThreadsController@index')->name('threads');
-Route::get('/threads/create', 'ThreadsController@create');
+Route::get('/threads/create', 'ThreadsController@create')->middleware('verified');
 Route::get('/threads/{channel}', 'ThreadsController@index');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
