@@ -39,7 +39,9 @@
                             <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>, 
                             and currently has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
                         </p>
-                        <subscribe-button-component :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button-component>
+                        @if (auth()->check())
+                            <subscribe-button-component :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button-component>
+                        @endif
                     </div>
                 </div>
             </div>

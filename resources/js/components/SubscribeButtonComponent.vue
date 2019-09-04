@@ -6,19 +6,27 @@
     export default {
         props: ['active'],
 
+        data() {
+            return {
+                isActive: this.active
+            }
+        },
+
         computed: {
             classes() {
-                return ['btn', this.active ? 'btn-warning' : 'btn-success'];
+                return ['btn', this.isActive ? 'btn-warning' : 'btn-success'];
             },
             buttonText() {
-                return this.active ? 'Unsubscribe': 'Subscribe';
+                return this.isActive ? 'Unsubscribe': 'Subscribe';
             }
         },
 
         methods: {
             subscribe() {
-                axios[this.active ? 'delete' : 'post'](`${location.pathname}/subscriptions`);
-                this.active = !this.active;
+                axios[this.isActive ? 'delete' : 'post'](`${location.pathname}/subscriptions`)
+                    .then(() => {
+                        this.isActive = !this.isActive
+                    });
             }
         }
     };
