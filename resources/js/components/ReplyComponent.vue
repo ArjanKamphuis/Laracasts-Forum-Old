@@ -6,7 +6,7 @@
                     <a :href="`/profiles/${owner}`" v-text="owner"></a> said <span v-text="ago"></span>...
                 </div>
                 <div v-if="signedIn">
-                    <favorite-component :reply="data"></favorite-component>
+                    <favorite-component :reply="reply"></favorite-component>
                 </div>
             </div>
         </div>
@@ -23,12 +23,12 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="card-footer level">
-            <div v-if="authorize('updateReply', reply)">
+        <div class="card-footer level" v-if="authorize('owns', reply) || authorize('owns', reply.thread)">
+            <div v-if="authorize('owns', reply)">
                 <button class="btn btn-secondary btn-sm mr-2" @click="editReply">Edit</button>
                 <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
             </div>
-            <button class="btn btn-outline-secondary btn-sm ml-auto" @click="markBestReply" v-show="!isBest">Best Reply?</button>
+            <button class="btn btn-outline-secondary btn-sm ml-auto" @click="markBestReply" v-if="authorize('owns', reply.thread) && !isBest">Best Reply?</button>
         </div>
     </div>
 </template>
@@ -38,31 +38,30 @@
     import FavoriteComponent from './FavoriteComponent';
     
     export default {
-        props: ['data'],
+        props: ['reply'],
 
         components: { FavoriteComponent },
 
         computed: {
             ago() {
-                return moment.utc(this.data.created_at).fromNow();
+                return moment.utc(this.reply.created_at).fromNow();
             }
         },
 
         data() {
             return {
                 editing: false,
-                id: this.data.id,
-                owner: this.data.owner.name,
-                body: this.data.body,
+                id: this.reply.id,
+                owner: this.reply.owner.name,
+                body: this.reply.body,
                 old_body_data: '',
-                isBest: this.data.isBest,
-                reply: this.data
+                isBest: this.reply.isBest
             };
         },
 
         created() {
             window.events.$on('best-reply-selected', id => {
-                this.isBest = (id === this.data.id);
+                this.isBest = (id === this.id);
             });
         },
 

@@ -3507,31 +3507,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['data'],
+  props: ['reply'],
   components: {
     FavoriteComponent: _FavoriteComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   computed: {
     ago: function ago() {
-      return moment__WEBPACK_IMPORTED_MODULE_0___default.a.utc(this.data.created_at).fromNow();
+      return moment__WEBPACK_IMPORTED_MODULE_0___default.a.utc(this.reply.created_at).fromNow();
     }
   },
   data: function data() {
     return {
       editing: false,
-      id: this.data.id,
-      owner: this.data.owner.name,
-      body: this.data.body,
+      id: this.reply.id,
+      owner: this.reply.owner.name,
+      body: this.reply.body,
       old_body_data: '',
-      isBest: this.data.isBest,
-      reply: this.data
+      isBest: this.reply.isBest
     };
   },
   created: function created() {
     var _this = this;
 
     window.events.$on('best-reply-selected', function (id) {
-      _this.isBest = id === _this.data.id;
+      _this.isBest = id === _this.id;
     });
   },
   methods: {
@@ -57665,7 +57664,7 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _vm.authorize("updateAvatar", _vm.user)
+    _vm.owns("updateAvatar", _vm.user)
       ? _c(
           "form",
           {
@@ -57970,7 +57969,7 @@ var render = function() {
           { key: reply.id },
           [
             _c("reply-component", {
-              attrs: { data: reply },
+              attrs: { reply: reply },
               on: {
                 deleted: function($event) {
                   return _vm.remove(index)
@@ -58040,7 +58039,7 @@ var render = function() {
             _vm.signedIn
               ? _c(
                   "div",
-                  [_c("favorite-component", { attrs: { reply: _vm.data } })],
+                  [_c("favorite-component", { attrs: { reply: _vm.reply } })],
                   1
                 )
               : _vm._e()
@@ -58109,46 +58108,43 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "card-footer level" }, [
-        _vm.authorize("updateReply", _vm.reply)
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary btn-sm mr-2",
-                  on: { click: _vm.editReply }
-                },
-                [_vm._v("Edit")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger btn-sm",
-                  on: { click: _vm.destroy }
-                },
-                [_vm._v("Delete")]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.isBest,
-                expression: "!isBest"
-              }
-            ],
-            staticClass: "btn btn-outline-secondary btn-sm ml-auto",
-            on: { click: _vm.markBestReply }
-          },
-          [_vm._v("Best Reply?")]
-        )
-      ])
+      _vm.authorize("owns", _vm.reply) ||
+      _vm.authorize("owns", _vm.reply.thread)
+        ? _c("div", { staticClass: "card-footer level" }, [
+            _vm.authorize("owns", _vm.reply)
+              ? _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary btn-sm mr-2",
+                      on: { click: _vm.editReply }
+                    },
+                    [_vm._v("Edit")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger btn-sm",
+                      on: { click: _vm.destroy }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.authorize("owns", _vm.reply.thread) && !_vm.isBest
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-secondary btn-sm ml-auto",
+                    on: { click: _vm.markBestReply }
+                  },
+                  [_vm._v("Best Reply?")]
+                )
+              : _vm._e()
+          ])
+        : _vm._e()
     ]
   )
 }
@@ -70446,11 +70442,9 @@ var app = new Vue({
 
 var user = window.App.user;
 module.exports = {
-  updateReply: function updateReply(reply) {
-    return reply.user_id === user.id;
-  },
-  updateAvatar: function updateAvatar(profileUser) {
-    return profileUser.id === user.id;
+  owns: function owns(model) {
+    var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
+    return model[prop] === user.id;
   }
 };
 
