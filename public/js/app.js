@@ -3105,15 +3105,6 @@ __webpack_require__.r(__webpack_exports__);
       avatar: this.user.avatar_path
     };
   },
-  computed: {
-    canUpdate: function canUpdate() {
-      var _this = this;
-
-      return this.authorize(function (user) {
-        return user.id === _this.user.id;
-      });
-    }
-  },
   methods: {
     onLoad: function onLoad(avatar) {
       this.avatar = avatar.src;
@@ -3300,11 +3291,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  computed: {
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    }
-  },
   data: function data() {
     return {
       body: ''
@@ -3528,9 +3514,6 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     ago: function ago() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default.a.utc(this.data.created_at).fromNow();
-    },
-    signedIn: function signedIn() {
-      return window.App.signedIn;
     }
   },
   data: function data() {
@@ -3540,9 +3523,16 @@ __webpack_require__.r(__webpack_exports__);
       owner: this.data.owner.name,
       body: this.data.body,
       old_body_data: '',
-      isBest: false,
+      isBest: this.data.isBest,
       reply: this.data
     };
+  },
+  created: function created() {
+    var _this = this;
+
+    window.events.$on('best-reply-selected', function (id) {
+      _this.isBest = id === _this.data.id;
+    });
   },
   methods: {
     editReply: function editReply() {
@@ -3555,12 +3545,12 @@ __webpack_require__.r(__webpack_exports__);
       this.editing = false;
     },
     update: function update() {
-      var _this = this;
+      var _this2 = this;
 
       axios.patch("/replies/".concat(this.id), {
         body: this.body
       }).then(function () {
-        _this.editing = false;
+        _this2.editing = false;
         flash('Updated');
       }, function (error) {
         return flash(error.response.data, 'danger');
@@ -3574,7 +3564,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     markBestReply: function markBestReply() {
-      this.isBest = true;
+      var _this3 = this;
+
+      axios.post("/replies/".concat(this.id, "/best")).then(function () {
+        window.events.$emit('best-reply-selected', _this3.id);
+        flash('Marked');
+      });
     }
   }
 });
@@ -57670,7 +57665,7 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _vm.canUpdate
+    _vm.authorize("updateAvatar", _vm.user)
       ? _c(
           "form",
           {
@@ -70453,6 +70448,9 @@ var user = window.App.user;
 module.exports = {
   updateReply: function updateReply(reply) {
     return reply.user_id === user.id;
+  },
+  updateAvatar: function updateAvatar(profileUser) {
+    return profileUser.id === user.id;
   }
 };
 
@@ -70541,6 +70539,8 @@ Vue.prototype.authorize = function () {
 
   return params[0](window.App.user);
 };
+
+Vue.prototype.signedIn = window.App.signedIn;
 
 /***/ }),
 

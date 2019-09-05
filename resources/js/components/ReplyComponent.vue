@@ -55,9 +55,15 @@
                 owner: this.data.owner.name,
                 body: this.data.body,
                 old_body_data: '',
-                isBest: false,
+                isBest: this.data.isBest,
                 reply: this.data
             };
+        },
+
+        created() {
+            window.events.$on('best-reply-selected', id => {
+                this.isBest = (id === this.data.id);
+            });
         },
 
         methods: {
@@ -87,7 +93,11 @@
                 }
             },
             markBestReply() {
-                this.isBest = true;
+                axios.post(`/replies/${this.id}/best`)
+                    .then(() => {
+                        window.events.$emit('best-reply-selected', this.id);
+                        flash('Marked');
+                    });
             }
         }
     };
