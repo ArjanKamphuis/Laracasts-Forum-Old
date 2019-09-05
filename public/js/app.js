@@ -57664,7 +57664,7 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _vm.owns("updateAvatar", _vm.user)
+    _vm.authorize("owns", _vm.user, "id")
       ? _c(
           "form",
           {
@@ -70457,6 +70457,14 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -70528,7 +70536,7 @@ Vue.prototype.authorize = function () {
   }
 
   if (typeof params[0] === 'string') {
-    return authorizations[params[0]](params[1]);
+    return authorizations[params[0]].apply(authorizations, _toConsumableArray(params.slice(1)));
   }
 
   return params[0](window.App.user);
