@@ -13,12 +13,6 @@
     import 'at.js';
     
     export default {
-        computed: {
-            signedIn() {
-                return window.App.signedIn;
-            }
-        },
-        
         data() {
             return {
                 body: ''

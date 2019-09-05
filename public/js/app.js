@@ -3531,13 +3531,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     signedIn: function signedIn() {
       return window.App.signedIn;
-    },
-    canUpdate: function canUpdate() {
-      var _this = this;
-
-      return this.authorize(function (user) {
-        return _this.data.user_id == user.id;
-      });
     }
   },
   data: function data() {
@@ -3547,7 +3540,8 @@ __webpack_require__.r(__webpack_exports__);
       owner: this.data.owner.name,
       body: this.data.body,
       old_body_data: '',
-      isBest: false
+      isBest: false,
+      reply: this.data
     };
   },
   methods: {
@@ -3561,12 +3555,12 @@ __webpack_require__.r(__webpack_exports__);
       this.editing = false;
     },
     update: function update() {
-      var _this2 = this;
+      var _this = this;
 
       axios.patch("/replies/".concat(this.id), {
         body: this.body
       }).then(function () {
-        _this2.editing = false;
+        _this.editing = false;
         flash('Updated');
       }, function (error) {
         return flash(error.response.data, 'danger');
@@ -58121,7 +58115,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "card-footer level" }, [
-        _vm.canUpdate
+        _vm.authorize("updateReply", _vm.reply)
           ? _c("div", [
               _c(
                 "button",
@@ -70448,6 +70442,22 @@ var app = new Vue({
 
 /***/ }),
 
+/***/ "./resources/js/authorizations.js":
+/*!****************************************!*\
+  !*** ./resources/js/authorizations.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var user = window.App.user;
+module.exports = {
+  updateReply: function updateReply(reply) {
+    return reply.user_id === user.id;
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -70516,9 +70526,20 @@ window.flash = function (message) {
   });
 };
 
-Vue.prototype.authorize = function (handler) {
-  var user = window.App.user;
-  return user ? handler(user) : false;
+var authorizations = __webpack_require__(/*! ./authorizations */ "./resources/js/authorizations.js");
+
+Vue.prototype.authorize = function () {
+  if (!window.App.signedIn) return false;
+
+  for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
+    params[_key] = arguments[_key];
+  }
+
+  if (typeof params[0] === 'string') {
+    return authorizations[params[0]](params[1]);
+  }
+
+  return params[0](window.App.user);
 };
 
 /***/ }),

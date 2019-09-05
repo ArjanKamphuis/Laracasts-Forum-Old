@@ -4,7 +4,7 @@
             <img :src="avatar" width="50" height="50" class="mr-2">
             <h1 v-text="user.name" class="mb-0"></h1>
         </div>
-        <form v-if="canUpdate" class="form-inline" method="POST" enctype="multipart/form-data">
+        <form v-if="authorize('updateAvatar', user)" class="form-inline" method="POST" enctype="multipart/form-data">
             <image-upload-component name="avatar" @loaded="onLoad"></image-upload-component>
         </form>
         
@@ -20,11 +20,6 @@
         data() {
             return {
                 avatar: this.user.avatar_path
-            }
-        },
-        computed: {
-            canUpdate() {
-                return this.authorize(user => user.id === this.user.id);
             }
         },
         methods: {

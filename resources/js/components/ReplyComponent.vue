@@ -24,7 +24,7 @@
         </div>
 
         <div class="card-footer level">
-            <div v-if="canUpdate">
+            <div v-if="authorize('updateReply', reply)">
                 <button class="btn btn-secondary btn-sm mr-2" @click="editReply">Edit</button>
                 <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
             </div>
@@ -45,12 +45,6 @@
         computed: {
             ago() {
                 return moment.utc(this.data.created_at).fromNow();
-            },
-            signedIn() {
-                return window.App.signedIn;
-            },
-            canUpdate() {
-                return this.authorize(user => this.data.user_id == user.id);
             }
         },
 
@@ -61,7 +55,8 @@
                 owner: this.data.owner.name,
                 body: this.data.body,
                 old_body_data: '',
-                isBest: false
+                isBest: false,
+                reply: this.data
             };
         },
 

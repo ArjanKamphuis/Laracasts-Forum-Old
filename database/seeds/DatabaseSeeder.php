@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now()
         ]);
 
-        $reply = factory('App\Thread')->create(['user_id' => $user->id]);
+        $thread = factory('App\Thread')->create(['user_id' => $user->id]);
         factory('App\Reply', 2)->create(['thread_id' => $thread->id, 'user_id' => $user->id]);
     }
 }
