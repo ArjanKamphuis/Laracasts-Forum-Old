@@ -60,6 +60,10 @@ class Thread extends Model
         return $reply;
     }
 
+    public function markBestReply(reply $reply) {
+        $this->update(['best_reply_id' => $reply->id]);
+    }
+
     public function scopeFilter($query, $filters) {
         return $filters->apply($query);
     }
