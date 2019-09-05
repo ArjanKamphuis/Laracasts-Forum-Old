@@ -1,6 +1,6 @@
 <template>
-    <div :id="`reply-${id}`" class="card mb-3" v-cloak>
-        <div class="card-header">
+    <div :id="`reply-${id}`" class="card mb-3" :class="isBest ? 'border-success' : ''" v-cloak>
+        <div class="card-header" :class="isBest ? 'bg-success' : ''">
             <div class="level">
                 <div class="flex">
                     <a :href="`/profiles/${owner}`" v-text="owner"></a> said <span v-text="ago"></span>...
@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" :class="isBest ? 'text-success' : ''">
             <div v-if="editing">
                 <form @submit.prevent="update">
                     <div class="form-group">
@@ -23,9 +23,12 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="card-footer" v-if="canUpdate">
-            <button class="btn btn-secondary btn-sm mr-2" @click="editReply">Edit</button>
-            <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+        <div class="card-footer level">
+            <div v-if="canUpdate">
+                <button class="btn btn-secondary btn-sm mr-2" @click="editReply">Edit</button>
+                <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm ml-auto" @click="markBestReply" v-show="!isBest">Best Reply?</button>
         </div>
     </div>
 </template>
@@ -57,7 +60,8 @@
                 id: this.data.id,
                 owner: this.data.owner.name,
                 body: this.data.body,
-                old_body_data: ''
+                old_body_data: '',
+                isBest: false
             };
         },
 
@@ -86,6 +90,9 @@
                     this.$emit('deleted', this.id);
                     flash('Reply has been deleted!');
                 }
+            },
+            markBestReply() {
+                this.isBest = true;
             }
         }
     };
