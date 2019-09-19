@@ -4,7 +4,9 @@
             <reply-component :reply="reply" @deleted="remove(index)"></reply-component>
         </div>
         <paginator-component :dataSet="dataSet" @changed="fetch"></paginator-component>
-        <new-reply-component @created="add"></new-reply-component>
+
+        <p v-if="$parent.locked" class="text-center">This thread has been locked. No more replies are allowed.</p>
+        <new-reply-component v-else @created="add"></new-reply-component>
     </div>
 </template>
 

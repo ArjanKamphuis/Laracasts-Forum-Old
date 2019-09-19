@@ -3417,6 +3417,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -3674,14 +3676,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['initialRepliesCount'],
+  props: ['dataRepliesCount', 'dataLocked'],
   components: {
     RepliesComponent: _components_RepliesComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     SubscribeButtonComponent: _components_SubscribeButtonComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      repliesCount: this.initialRepliesCount
+      repliesCount: this.dataRepliesCount,
+      locked: this.dataLocked
     };
   }
 });
@@ -57986,7 +57989,11 @@ var render = function() {
         on: { changed: _vm.fetch }
       }),
       _vm._v(" "),
-      _c("new-reply-component", { on: { created: _vm.add } })
+      _vm.$parent.locked
+        ? _c("p", { staticClass: "text-center" }, [
+            _vm._v("This thread has been locked. No more replies are allowed.")
+          ])
+        : _c("new-reply-component", { on: { created: _vm.add } })
     ],
     2
   )
@@ -70445,6 +70452,9 @@ module.exports = {
   owns: function owns(model) {
     var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
     return model[prop] === user.id;
+  },
+  isAdmin: function isAdmin() {
+    return ['JohnDoe', 'JaneDoe'].includes(user.name);
   }
 };
 
