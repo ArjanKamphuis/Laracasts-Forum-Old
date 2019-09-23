@@ -8,26 +8,8 @@
 <thread-page :thread="{{ $thread }}" inline-template>
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <div class="level">
-                            <img src="{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" width="25" height="25" class="mr-2">
-                            <div class="flex">
-                                <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted: {{ $thread->title }}
-                            </div>
-                            @can ('update', $thread)
-                                <form action="{{ $thread->path() }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this thread?')">Delete Thread</button>
-                                </form>
-                            @endcan
-                        </div>
-                    </div>
-                    <div class="card-body">{{ $thread->body }}</div>
-                </div>
-
+            <div class="col-md-8" v-cloak>
+                @include('threads._question')
                 <replies-component @removed="repliesCount--" @added="repliesCount++"></replies-component>
             </div>
 

@@ -8,9 +8,6 @@ use App\Thread;
 use App\Http\Requests\CreatePostRequest;
 use App\Rules\SpamFree;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-
 class RepliesController extends Controller
 {
     /**
@@ -54,7 +51,7 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        $this->validate(request(), ['body' => ['required', new SpamFree]]);
+        request()->validate(['body' => ['required', new SpamFree]]);
         $reply->update(request(['body']));
     }
 

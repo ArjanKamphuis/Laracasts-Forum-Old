@@ -9,8 +9,6 @@ use App\Filters\ThreadFilters;
 use App\Rules\Recaptcha;
 use App\Rules\SpamFree;
 
-use Illuminate\Http\Request;
-
 class ThreadsController extends Controller
 {
     /**
@@ -50,13 +48,12 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Rules\Recaptcha $recaptcha
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Recaptcha $recaptcha)
+    public function store(Recaptcha $recaptcha)
     {
-        $this->validate($request, [
+        request()->validate([
             'title' => ['required', new SpamFree],
             'body'  => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id',
